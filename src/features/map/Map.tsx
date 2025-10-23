@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -66,14 +66,13 @@ export function FitBounds({
 
     // create bounds and fit map
     const bounds = L.latLngBounds(points);
-
+    // console.log(points);
     if (points.length > 1) {
+      // use fitBounds with padding to show all markers clearly
+      map.fitBounds(bounds, { padding: [50, 50] });
       // optionally use smooth flyTo instead
       if (animate) {
         map.flyToBounds(bounds, { padding: [50, 50] });
-      } else {
-        // use fitBounds with padding to show all markers clearly
-        map.fitBounds(bounds, { padding: [50, 50] });
       }
     }
   }, [properties, userLocation, map, defaultCenter, animate]);
@@ -98,7 +97,7 @@ function LocationMarker({
   const [position, setPosition] = useState<L.LatLngLiteral | null>(
     center ? { lat: center[0], lng: center[1] } : null
   );
-  const { data, setData } = useSearch();
+  const { setData } = useSearch();
   // Initialize marker position
   useEffect(() => {
     if (position) {
@@ -130,35 +129,15 @@ function LocationMarker({
   const handleDragEnd = async (event: L.DragEndEvent) => {
     const marker = event.target;
     const newPos = marker.getLatLng();
-
     // Update local state
     setPosition(newPos);
-
     // Update parent / callback
     onPositionChange?.([newPos.lat, newPos.lng]);
 
-    // Log to console
-    // setData("NEARBY", data:{
-    //   lat: 0,
-    //   lng: 0,
-    //   radius: data.nearBy?.radius,
-    // });
-
     const newLocation = { lat: newPos.lat, lng: newPos.lng };
-    const newNearBy: NearBy = {
-      lat: newLocation.lat,
-      lng: newLocation.lng,
-      radius: data.nearBy?.radius || 0,
-    };
-
-    setData("NEARBY", newNearBy);
-
-    // setResults();
-
-    // data.nearBy?.lat = newLocation.lat;
-    // data.nearBy?.lng = newLocation.lng;
-
-    // console.log(data.nearBy);
+    // console.log(newLocation);
+    setData(newLocation);
+    // startSearch();
   };
 
   return position ? (
@@ -199,10 +178,18 @@ export default function PropertyMap({
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     null
   );
-  const { data, setResults } = useSearch();
+  const { startSearch, data } = useSearch();
+
+  const prevData = useRef(data);
+  const hasRunThis = useRef(false);
 
   useEffect(() => {
-    setResults();
+    if (hasRunThis.current) return;
+    if (data && data !== prevData.current) {
+      hasRunThis.current = true;
+      // startSearch();
+    }
+    prevData.current = data;
   }, [data]);
 
   return (

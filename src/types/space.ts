@@ -59,7 +59,7 @@ export type Location = {
 };
 
 export type PropertyItem = {
-  id: number;
+  id?: number;
   name: string;
   space_type: string;
   deal_type: string;
@@ -68,11 +68,75 @@ export type PropertyItem = {
   price_currency: string;
   price_duration: string;
   price_duration_count: number;
-  address_id: number;
-  location_id: number;
-  created_at: string;
-  updated_at: string;
+  address_id?: number;
+  location_id?: number;
+  created_at?: string;
+  updated_at?: string;
   Address: Address;
   Location: Location;
   SpaceProfile: SpaceProfile;
 };
+
+export interface SpacesState {
+  error: string | null;
+  loading: boolean;
+  spaces: PropertyItem[];
+}
+
+export const dealTypeOptions = [
+  { label: "All", value: "" },
+  { label: "Rent", value: "RENT" },
+  { label: "Sale", value: "SALE" },
+  { label: "Lease", value: "LEASE" },
+];
+
+export const spaceCategoryOptions = [
+  { label: "All", value: "" },
+  { label: "Residential", value: "RESIDENTIAL" },
+  { label: "Commercial", value: "COMMERCIAL" },
+  { label: "Farm", value: "FARM" },
+  { label: "Apartment", value: "APARTMENT" },
+  { label: "Room", value: "ROOM" },
+  { label: "Office", value: "OFFICE" },
+  { label: "Retail", value: "RETAIL" },
+  { label: "Industrial", value: "INDUSTRIAL" },
+  { label: "Warehouse", value: "WAREHOUSE" },
+  { label: "Hotel", value: "HOTEL" },
+  { label: "Hospitality", value: "HOSPITALITY" },
+  { label: "Multifamily", value: "MULTIFAMILY" },
+  { label: "Mixed Use", value: "MIXED_USE" },
+  { label: "Special Purpose", value: "SPECIAL_PURPOSE" },
+  { label: "Land", value: "LAND" },
+  { label: "Other", value: "OTHER" },
+];
+
+export const priceDurationOptions = [
+  { label: "All", value: "" },
+  { label: "Day", value: "DAY" },
+  { label: "Week", value: "WEEK" },
+  { label: "Month", value: "MONTH" },
+  { label: "Year", value: "YEAR" },
+  { label: "One Time", value: "ONE_TIME" },
+];
+
+export const priceCurrencyOptions = [
+  { label: "All", value: "" },
+  { label: "Day", value: "DAY" },
+  { label: "Week", value: "WEEK" },
+  { label: "Month", value: "MONTH" },
+  { label: "Year", value: "YEAR" },
+  { label: "One Time", value: "ONE_TIME" },
+];
+// export const priceDurationCountOptions = [
+//   { label: "All", value: "" },
+//   { label: "Day", value: "DAY" },
+//   { label: "Week", value: "WEEK" },
+//   { label: "Month", value: "MONTH" },
+//   { label: "Year", value: "YEAR" },
+//   { label: "One Time", value: "ONE_TIME" },
+// ];
+
+export const priceDurationCountOptions = Array.from({ length: 5 }, (_, i) => ({
+  label: `${i + 1}`,
+  value: `${i + 1}`,
+}));

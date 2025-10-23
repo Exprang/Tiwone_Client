@@ -1,4 +1,4 @@
-import { useReducer, type ReactNode } from "react";
+import { useReducer, type ReactNode, useCallback, useRef } from "react";
 import type {
   SearchState,
   SearchType,
@@ -10,57 +10,97 @@ import type {
 import {
   initialSearchState,
   searchReducer,
+  SET_ERROR,
+  START_SEARCH,
+  SET_SEARCH_DATA,
+  RESET_SEARCH_DATA,
 } from "../reducers/useSearchReducer";
-// import type { PropertyItem } from "../types/space";
 import { SearchContext } from "../hooks/useSearchHook";
 import { searchSpaces } from "../api/spaceAPI";
 
 export interface SearchContextProps extends SearchState {
   setSearchType: (type: SearchType) => void;
   setFilters: (filters: Filters) => void;
-  setData: (type: SearchType, data: NearBy | TextSearch | SmartSearch) => void;
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
-  setResults: () => void;
+  setData: (
+    data: NearBy | TextSearch | SmartSearch,
+    searchType?: SearchType
+  ) => void;
+  startSearch: () => Promise<void>;
   resetSearch: () => void;
 }
 
 export const SearchProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(searchReducer, initialSearchState);
 
-  // -------------------
-  // Convenience methods
-  // -------------------
-  const setSearchType = (type: SearchType) =>
-    dispatch({ type: "SET_SEARCH_TYPE", payload: type });
+  // Use ref to always get latest state in async functions
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
-  const setFilters = (filters: Filters) =>
-    dispatch({ type: "SET_FILTERS", payload: filters });
+  // -----------------------
+  // Context Methods
+  // -----------------------
+  const setSearchType = useCallback(
+    (type: SearchType) =>
+      dispatch({ type: SET_SEARCH_DATA, payload: { searchType: type } }),
+    []
+  );
 
-  const setData = (type: SearchType, data: NearBy | TextSearch | SmartSearch) =>
-    dispatch({ type: "SET_DATA", payload: { type, data } });
+  const setFilters = useCallback(
+    (filters: Filters) =>
+      dispatch({ type: SET_SEARCH_DATA, payload: { filters } }),
+    []
+  );
 
-  const setLoading = (loading: boolean) =>
-    dispatch({ type: "SET_LOADING", payload: loading });
+  const setData = useCallback(
+    (data: NearBy | TextSearch | SmartSearch, searchType?: SearchType) => {
+      type PayloadData = {
+        nearBy?: NearBy;
+        text?: TextSearch;
+        smart?: SmartSearch;
+      };
+      const payloadData: PayloadData = {};
 
-  const setError = (error: string | null) =>
-    dispatch({ type: "SET_ERROR", payload: error });
+      // Type guards
+      if ("lat" in data && "lng" in data) {
+        payloadData.nearBy = data as NearBy; // TS knows this is NearBy
+      } else if ("query" in data) {
+        payloadData.text = data as TextSearch;
+      } else {
+        payloadData.smart = data as SmartSearch;
+      }
 
-  const setResults = async () => {
+      dispatch({
+        type: SET_SEARCH_DATA,
+        payload: { data: payloadData, searchType },
+      });
+    },
+    []
+  );
+
+  const startSearch = useCallback(async () => {
+    dispatch({ type: START_SEARCH });
+
     try {
-      const { searchType, filters, data } = state;
+      const { searchType, filters, data } = stateRef.current;
       const searchInput = { searchType, filters, ...data };
       const response = await searchSpaces(searchInput);
+
       if (response.success) {
-        console.log(response.data);
         dispatch({ type: "SET_RESULTS", payload: response.data });
+      } else {
+        dispatch({
+          type: SET_ERROR,
+          payload: response.message ?? "Unknown error",
+        });
       }
     } catch {
-      // dispatch({ type: "NETWORK_FAILURE" });
+      dispatch({ type: SET_ERROR, payload: "Network error" });
     }
-  };
+  }, []);
 
-  const resetSearch = () => dispatch({ type: "RESET_SEARCH" });
+  const resetSearch = useCallback(() => {
+    dispatch({ type: RESET_SEARCH_DATA });
+  }, []);
 
   return (
     <SearchContext.Provider
@@ -69,9 +109,7 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
         setSearchType,
         setFilters,
         setData,
-        setLoading,
-        setError,
-        setResults,
+        startSearch,
         resetSearch,
       }}
     >

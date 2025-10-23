@@ -17,9 +17,9 @@ export interface Filters {
 }
 
 export interface NearBy {
-  lat: number;
-  lng: number;
-  radius: number; // in meters
+  lat?: number;
+  lng?: number;
+  radius?: number; // in meters
 }
 
 export interface SmartSearch {
@@ -31,6 +31,25 @@ export interface TextSearch {
 }
 
 export type SearchType = "NEARBY" | "TEXT" | "SMART";
+export type DealType = "RENT" | "SALE" | "LEASE";
+export type SpaceCategory =
+  | "RESIDENTIAL"
+  | "COMMERCIAL"
+  | "FARM"
+  | "APARTMENT"
+  | "ROOM"
+  | "OFFICE"
+  | "RETAIL"
+  | "INDUSTRIAL"
+  | "WAREHOUSE"
+  | "HOTEL"
+  | "HOSPITALITY"
+  | "MULTIFAMILY"
+  | "MIXED_USE"
+  | "SPECIAL_PURPOSE"
+  | "LAND"
+  | "OTHER";
+export type PriceDuration = "DAY" | "WEEK" | "MONTH" | "YEAR" | "ONE_TIME";
 
 export interface SearchRequest {
   searchType: SearchType;

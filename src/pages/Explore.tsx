@@ -1,11 +1,48 @@
 import { LayoutList, Map } from "lucide-react";
-import React, { useState, useEffect } from "react";
-import Filter from "../features/Filter";
+import React, { useState, useEffect, useRef } from "react";
+import SearchFilter from "../features/filter/SearchFilter";
 import MapView from "../features/MapView/MapView";
 import ListSpace from "../features/space/ListSpace";
+import { getAccurateUserLocationCached } from "../utils/userLocation";
+import { useSearch } from "../hooks/useSearchHook";
 
 function Explore() {
-  // Initialize state from localStorage or default to false
+  const { data, setData, searchResults, startSearch } = useSearch();
+  const [center, setCenter] = useState<[number, number]>();
+
+  const hasRun = useRef(false);
+
+  useEffect(() => {
+    if (hasRun.current) return; // safe guard
+    hasRun.current = true;
+
+    (async () => {
+      try {
+        const location = await getAccurateUserLocationCached();
+        const { lat, lon } = location.coordinates;
+        setData({ lat, lng: lon });
+        setCenter([lat, lon]);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, []);
+
+  const prevData = useRef(data); // store initial value
+  const hasRunThis = useRef(false);
+
+  useEffect(() => {
+    if (hasRunThis.current) return; // already ran
+
+    // Only run if data exists AND has changed from initial
+    if (data && data !== prevData.current) {
+      hasRunThis.current = true;
+      startSearch();
+      // console.log(data);
+    }
+    prevData.current = data; // update for next comparison
+  }, [data]);
+
   const [showMap, setShowMap] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("showMap") === "true";
@@ -21,17 +58,22 @@ function Explore() {
   return (
     <div className="overflow-hidden">
       {/* Filter Bar */}
-      <div className="bg-amber-200 fixed left-0 right-0 h-16 flex items-center px-4">
-        <Filter />
-      </div>
+      {/* <div className="fixed left-0 right-0 h-16 flex items-center ps-3.5">
+      </div> */}
 
       {/* Main Content */}
-      <div className="fixed left-0 right-0 bottom-0 top-36">
+      <div className="fixed left-0 right-0 bottom-0 top-20">
         {/* Mobile: Toggle List/Map */}
         <div className="lg:hidden h-full flex flex-col overflow-hidden">
           {showMap ? (
             <div className="m-4 h-full">
-              <MapView />
+              {center && (
+                <MapView
+                  searchResults={searchResults}
+                  radius={data.nearBy?.radius || 1000}
+                  center={center}
+                />
+              )}
             </div>
           ) : (
             <ListSpace />
@@ -56,7 +98,13 @@ function Explore() {
             <ListSpace />
           </div>
           <div className="m-4">
-            <MapView />
+            {center && (
+              <MapView
+                searchResults={searchResults}
+                radius={data.nearBy?.radius || 1000}
+                center={center}
+              />
+            )}
           </div>
         </div>
       </div>

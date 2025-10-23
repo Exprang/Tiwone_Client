@@ -1,6 +1,3 @@
-// -------------------
-// Hook for consuming
-// -------------------
 import { createContext, useContext } from "react";
 import type { SearchContextProps } from "../contexts/SearchContext";
 export const SearchContext = createContext<SearchContextProps | undefined>(

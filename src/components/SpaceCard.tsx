@@ -1,22 +1,32 @@
 import type { PropertyItem } from "../types/space";
 import {
   MapPin,
-  Edit2,
+  // Edit2,
   Trash2,
-  Heart,
+  // Heart,
   DollarSign,
   Building2,
   Clock,
 } from "lucide-react";
 import ImageSlider from "./ImageSlider";
+import CreateProperty from "../features/listing/CreateProperty";
+import ViewFinder from "../features/listing/ViewFinder";
 
 interface SpaceInterface {
   space: PropertyItem;
   useCase?: "finder" | "owner" | "onMap" | "other";
+  onDelete?: (id: number) => void;
+  onEdit?: (space: PropertyItem) => void;
 }
 
-function SpaceCard({ space, useCase = "finder" }: SpaceInterface) {
+function SpaceCard({
+  space,
+  useCase = "finder",
+  onDelete,
+}: // onEdit,
+SpaceInterface) {
   const {
+    id,
     name,
     space_type,
     deal_type,
@@ -27,17 +37,15 @@ function SpaceCard({ space, useCase = "finder" }: SpaceInterface) {
     status,
     Address,
     created_at,
-    SpaceProfile,
   } = space;
 
-  // --- Business logic for pricing ---
+  // --- Pricing logic ---
   const durationLabel =
     price_duration_count > 1
       ? `${price_duration_count} ${price_duration.toLowerCase()}s`
       : price_duration.toLowerCase();
 
   const totalPrice = Number(price_amount) * price_duration_count;
-
   const formattedPrice = `${price_currency} ${Number(
     price_amount
   ).toLocaleString()} / ${price_duration.toLowerCase()}`;
@@ -46,7 +54,6 @@ function SpaceCard({ space, useCase = "finder" }: SpaceInterface) {
       ? `Total ${price_currency} ${totalPrice.toLocaleString()} (${durationLabel})`
       : null;
 
-  // --- Hide "AVAILABLE" status badge ---
   const showStatusBadge = status && status !== "AVAILABLE";
 
   const StatusBadge = showStatusBadge && (
@@ -104,9 +111,10 @@ function SpaceCard({ space, useCase = "finder" }: SpaceInterface) {
           {ImageSection}
           {MetaInfo}
           <div className="flex justify-between items-center px-3 py-2 border-t border-gray-100">
-            <button className="flex items-center text-gray-500 hover:text-red-500 transition">
+            {/* <button className="flex items-center text-gray-500 hover:text-red-500 transition">
               <Heart size={16} className="mr-1" /> Save
-            </button>
+            </button> */}
+            <ViewFinder space={space} />
             <span className="text-xs text-gray-400 flex items-center">
               <Clock size={12} className="mr-1" />
               {new Date(created_at).toLocaleDateString()}
@@ -117,14 +125,21 @@ function SpaceCard({ space, useCase = "finder" }: SpaceInterface) {
 
     case "owner":
       return (
-        <div className="rounded-lg border border-gray-200 shadow-sm bg-white overflow-hidden">
+        <div className="rounded-lg border border-gray-200 shadow-sm bg-white">
           {ImageSection}
           {MetaInfo}
           <div className="flex justify-between p-3 border-t border-gray-100">
-            <button className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium">
+            {/* <button
+              onClick={() => onEdit?.(space)}
+              className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium"
+            >
               <Edit2 size={14} /> Edit
-            </button>
-            <button className="flex items-center gap-1 text-red-500 hover:text-red-700 text-sm font-medium">
+            </button> */}
+            <CreateProperty type="edit" space={space} />
+            <button
+              onClick={() => onDelete?.(id)}
+              className="flex items-center gap-1 text-red-500 hover:text-red-700 text-sm font-medium"
+            >
               <Trash2 size={14} /> Delete
             </button>
           </div>

@@ -9,6 +9,8 @@ interface InputFieldProps {
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
+  showError?: boolean;
+  disabled?: boolean;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -19,6 +21,8 @@ const InputField: React.FC<InputFieldProps> = ({
   value,
   onChange,
   error,
+  showError = true,
+  disabled = false,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -30,7 +34,11 @@ const InputField: React.FC<InputFieldProps> = ({
       <div className="relative">
         {/* Left icon */}
         {icon && (
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600">
+          <div
+            className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${
+              disabled ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
             {icon}
           </div>
         )}
@@ -43,9 +51,15 @@ const InputField: React.FC<InputFieldProps> = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full px-10 py-3 border rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-            error ? "border-red-500" : "border-gray-300"
-          }`}
+          disabled={disabled}
+          className={`w-full px-10 py-3 border rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+            ${error ? "border-red-500" : "border-gray-300"}
+            ${
+              disabled
+                ? "bg-gray-100 cursor-not-allowed text-gray-500"
+                : "bg-white"
+            }
+          `}
         />
 
         {/* Right show/hide icon for password */}
@@ -53,7 +67,10 @@ const InputField: React.FC<InputFieldProps> = ({
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+            className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
+              disabled ? "text-gray-400 cursor-not-allowed" : "text-gray-500"
+            }`}
+            disabled={disabled}
           >
             {showPassword ? (
               <EyeOff className="w-5 h-5" />
@@ -65,9 +82,9 @@ const InputField: React.FC<InputFieldProps> = ({
       </div>
 
       {/* Error message */}
-      {/* {error && ( */}
-      <div className="text-red-500 text-sm h-6 rounded-sm">{error}</div>
-      {/* )} */}
+      {error && showError && (
+        <div className="text-red-500 text-sm h-6 rounded-sm">{error}</div>
+      )}
     </div>
   );
 };

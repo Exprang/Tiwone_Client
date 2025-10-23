@@ -8,14 +8,17 @@ import SignupPage from "../features/auth/SignupPage";
 import PublicRoute from "../features/auth/PublicRoute";
 import PrivateRoute from "../features/auth/PrivateRoute";
 import { SearchProvider } from "../contexts/SearchContext";
+import { SpaceProvider } from "../contexts/SpaceContext";
 
 function MainLayout() {
   return (
     <>
-      <Header />
-      <main className="absolute top-20 bottom-0 right-0 left-0 scroll-auto grid">
-        <Outlet />
-      </main>
+      <SearchProvider>
+        <Header />
+        <main className="absolute top-20 bottom-0 right-0 left-0 scroll-auto grid">
+          <Outlet />
+        </main>
+      </SearchProvider>
     </>
   );
 }
@@ -32,18 +35,18 @@ function AppRoutes() {
       {/* Main Layout */}
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route
-          path="/explore"
-          element={
-            <SearchProvider>
-              <Explore />
-            </SearchProvider>
-          }
-        />
+        <Route path="/explore" element={<Explore />} />
 
         {/* Private routes */}
         <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <SpaceProvider>
+                <Dashboard />
+              </SpaceProvider>
+            }
+          />
         </Route>
       </Route>
     </Routes>

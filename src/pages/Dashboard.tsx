@@ -5,12 +5,10 @@ import { useSpace } from "../hooks/useSpaceHook";
 import CreateProperty from "../features/listing/CreateProperty";
 import { useEffect } from "react";
 import type { PropertyItem } from "../types/space";
-// import type { PropertyItem } from "../types/space";
 
 // Dashboard Component
 function Dashboard() {
   const { spaces, loading, error, readSpaces, deleteSpace } = useSpace();
-  // const [propertyItem, setPropertyItem] = useState<PropertyItem[]>([]);
 
   useEffect(() => {
     readSpaces();

@@ -19,7 +19,6 @@ function MobileNav() {
       <div className="hidden p-2 rounded-sm  lg:block">
         <NavLinks
           showLabels
-          // showIcons
           className="flex flex-row gap-6"
           // hover="text-gray-950 hover:text-brand"
         />
@@ -68,7 +67,7 @@ function MobileNav() {
 
         <div className="fixed bottom-0 left-0 w-full p-8" onClick={toggleMenu}>
           {/* <SocialLinks className="text-gray-950 hover:text-brand" /> */}
-          social links
+          ...
         </div>
       </aside>
     </>

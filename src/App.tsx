@@ -1,5 +1,3 @@
-// import SigninPage from "./features/auth/SigninPage";
-
 import { AuthProvider } from "./contexts/AuthContext";
 import AppRoutes from "./routes/AppRoutes";
 

@@ -20,10 +20,7 @@ import DistanceSlider from "./Range";
 import { useSearch } from "../../hooks/useSearchHook";
 import { useUser } from "../../hooks/useAuth";
 
-// -------------------- Option Constants -------------------- //
-
-// -------------------- Component -------------------- //
-function Filter({ setShowFilterPanel }) {
+function Filter() {
   const { setFilters, setData } = useSearch();
   const { isAuthenticated, user } = useUser();
   const [userStatus, setUserStatus] = useState<
@@ -55,7 +52,6 @@ function Filter({ setShowFilterPanel }) {
   const applyFilters = () => {
     setFilters(filterState);
     setData({ radius });
-    setShowFilterPanel(false);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Modal from "../../components/Modal";
 import { Expand } from "lucide-react";
 import type { PropertyItem } from "../../types/space";

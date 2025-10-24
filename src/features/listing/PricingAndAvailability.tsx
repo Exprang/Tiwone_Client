@@ -40,7 +40,7 @@ const PricingAndAvailability: React.FC<PricingAndAvailabilityProps> = ({
             name="amount"
             placeholder="Enter price"
             icon={<Coins className="w-5 h-5 text-gray-500" />}
-            value={price.price_amount}
+            value={price.price_amount.toString() || ""}
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
@@ -63,7 +63,7 @@ const PricingAndAvailability: React.FC<PricingAndAvailabilityProps> = ({
         onChange={(e) =>
           setFormData((prev) => ({
             ...prev,
-            price: { ...prev.price, price_duration: e.target.value },
+            price_duration: { ...prev.price, price_duration: e.target.value },
           }))
         }
         options={priceDurationOptions.slice(1)}
@@ -76,7 +76,7 @@ const PricingAndAvailability: React.FC<PricingAndAvailabilityProps> = ({
         price.price_duration === "YEAR") && (
         <SelectField
           name="durationCount"
-          value={price.price_duration_count}
+          value={price.price_duration_count?.toString() || ""}
           onChange={(e) =>
             setFormData((prev) => ({
               ...prev,

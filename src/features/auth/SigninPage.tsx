@@ -59,7 +59,7 @@ function SigninPage() {
             onChange={(e) => {
               setEmail(e.target.value);
             }}
-            error={getFieldError("email", error)}
+            error={getFieldError("email", Array.isArray(error) ? error : [])}
           />
           <InputField
             name="password"
@@ -70,7 +70,7 @@ function SigninPage() {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
-            error={getFieldError("password", error)}
+            error={getFieldError("password", Array.isArray(error) ? error : [])}
           />
 
           {/* Forgot Password Link */}

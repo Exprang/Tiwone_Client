@@ -117,7 +117,7 @@ SpaceInterface) {
             <ViewFinder space={space} />
             <span className="text-xs text-gray-400 flex items-center">
               <Clock size={12} className="mr-1" />
-              {new Date(created_at).toLocaleDateString()}
+              {new Date(created_at || "").toLocaleDateString()}
             </span>
           </div>
         </div>
@@ -137,7 +137,7 @@ SpaceInterface) {
             </button> */}
             <CreateProperty type="edit" space={space} />
             <button
-              onClick={() => onDelete?.(id)}
+              onClick={() => onDelete?.(id || 0)}
               className="flex items-center gap-1 text-red-500 hover:text-red-700 text-sm font-medium"
             >
               <Trash2 size={14} /> Delete

@@ -72,12 +72,9 @@ export type PropertyItem = {
   location_id?: number;
   created_at?: string;
   updated_at?: string;
-  Address?: Address;
-  Location?: Location;
+  Address: Address;
+  Location: Location;
   SpaceProfile?: SpaceProfile;
-  address?: Address;
-  location?: Location;
-  space_profile?: SpaceProfile;
 };
 
 export interface SpacesState {

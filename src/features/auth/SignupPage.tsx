@@ -65,7 +65,7 @@ function SignupPage() {
             onChange={(e) => {
               setName(e.target.value);
             }}
-            error={getFieldError("username", error)}
+            error={getFieldError("username", Array.isArray(error) ? error : [])}
           />
           <InputField
             name="email"
@@ -76,7 +76,7 @@ function SignupPage() {
             onChange={(e) => {
               setEmail(e.target.value);
             }}
-            error={getFieldError("email", error)}
+            error={getFieldError("email", Array.isArray(error) ? error : [])}
           />
           <InputField
             name="password"
@@ -87,7 +87,7 @@ function SignupPage() {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
-            error={getFieldError("password", error)}
+            error={getFieldError("password", Array.isArray(error) ? error : [])}
           />
           <InputField
             name="confirmPassword"
@@ -98,7 +98,7 @@ function SignupPage() {
             onChange={(e) => {
               setConfirmPassword(e.target.value);
             }}
-            error={getFieldError("confirm", error)}
+            error={getFieldError("confirm", Array.isArray(error) ? error : [])}
           />
 
           <button

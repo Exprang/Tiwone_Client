@@ -4,6 +4,7 @@ import InputField from "../../components/InputField";
 import SelectField from "../../components/SelectField";
 import { dealTypeOptions, spaceCategoryOptions } from "../../types/space";
 import type { SpaceFormState } from "./spaceState";
+import type { DealType, SpaceCategory } from "../../types/search";
 
 interface BasicInfoProps {
   formData: SpaceFormState;
@@ -23,25 +24,29 @@ const BasicInfo: React.FC<BasicInfoProps> = ({ formData, setFormData }) => {
         placeholder="Enter space name (e.g., Premium Office Tower)"
         icon={<Tag className="w-5 h-5 text-gray-500" />}
       />
-
       {/* Space Category */}
       <SelectField
         name="category"
         value={formData.space_type}
         onChange={(e) =>
-          setFormData((prev) => ({ ...prev, space_type: e.target.value }))
+          setFormData((prev) => ({
+            ...prev,
+            space_type: e.target.value as SpaceCategory,
+          }))
         }
         options={spaceCategoryOptions.slice(1)}
         placeholder="Select space category (e.g., Office, Retail, Warehouse)"
         icon={<Building2 className="w-5 h-5 text-gray-500" />}
       />
-
       {/* Deal Type */}
       <SelectField
         name="dealType"
         value={formData.deal_type}
         onChange={(e) =>
-          setFormData((prev) => ({ ...prev, deal_type: e.target.value }))
+          setFormData((prev) => ({
+            ...prev,
+            deal_type: e.target.value as DealType,
+          }))
         }
         options={dealTypeOptions.slice(1)}
         placeholder="Select deal type (e.g., Rent, Sale)"

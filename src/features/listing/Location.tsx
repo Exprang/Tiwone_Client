@@ -144,7 +144,7 @@ const Location: React.FC<LocationProps> = ({ formData, setFormData }) => {
           placeholder="Latitude (-90 to +90)"
           icon={<Navigation className="w-5 h-5 text-gray-500" />}
           type="number"
-          value={coordinates.lat}
+          value={coordinates.lat.toString()}
           onChange={(e) => handleLatitudeChange(e.target.value)}
           error={errors.lat}
         />
@@ -153,7 +153,7 @@ const Location: React.FC<LocationProps> = ({ formData, setFormData }) => {
           placeholder="Longitude (-180 to +180)"
           icon={<Navigation className="w-5 h-5 text-gray-500 rotate-90" />}
           type="number"
-          value={coordinates.lng}
+          value={coordinates.lng.toString()}
           onChange={(e) => handleLongitudeChange(e.target.value)}
           error={errors.lon}
         />

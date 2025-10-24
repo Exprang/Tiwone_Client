@@ -9,7 +9,7 @@ import {
   SPACE_UPDATE,
   SPACE_DELETE,
 } from "../reducers/useSpaceReducer";
-import type { SpacesState, PropertyItem } from "../types/space";
+import type { SpacesState } from "../types/space";
 import { SpaceContext } from "../hooks/useSpaceHook";
 import {
   createSpaceAPI,
@@ -18,12 +18,13 @@ import {
   updateSpaceAPI,
 } from "../api/spaceAPI";
 import type { SpaceFormState } from "../features/listing/spaceState";
+import type { PropertyUpdateInterface } from "../features/listing/updateSpace";
 
 // Context type
 export interface SpaceContextType extends SpacesState {
   createSpace: (space: SpaceFormState) => void;
   readSpaces: () => void;
-  updateSpace: (id: number | string, space: PropertyItem) => void;
+  updateSpace: (id: number | string, space: PropertyUpdateInterface) => void;
   deleteSpace: (id: number) => void;
 }
 
@@ -63,7 +64,7 @@ export const SpaceProvider = ({ children }: { children: ReactNode }) => {
 
   // UPDATE
   const updateSpace = useCallback(
-    async (id: number | string, space: PropertyItem) => {
+    async (id: number | string, space: PropertyUpdateInterface) => {
       dispatch({ type: SET_LOADING });
       try {
         const response = await updateSpaceAPI(id, space);

@@ -72,9 +72,12 @@ export type PropertyItem = {
   location_id?: number;
   created_at?: string;
   updated_at?: string;
-  Address: Address;
-  Location: Location;
-  SpaceProfile: SpaceProfile;
+  Address?: Address;
+  Location?: Location;
+  SpaceProfile?: SpaceProfile;
+  address?: Address;
+  location?: Location;
+  space_profile?: SpaceProfile;
 };
 
 export interface SpacesState {
@@ -127,14 +130,6 @@ export const priceCurrencyOptions = [
   { label: "Year", value: "YEAR" },
   { label: "One Time", value: "ONE_TIME" },
 ];
-// export const priceDurationCountOptions = [
-//   { label: "All", value: "" },
-//   { label: "Day", value: "DAY" },
-//   { label: "Week", value: "WEEK" },
-//   { label: "Month", value: "MONTH" },
-//   { label: "Year", value: "YEAR" },
-//   { label: "One Time", value: "ONE_TIME" },
-// ];
 
 export const priceDurationCountOptions = Array.from({ length: 5 }, (_, i) => ({
   label: `${i + 1}`,

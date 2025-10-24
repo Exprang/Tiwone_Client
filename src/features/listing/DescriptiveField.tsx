@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FileText, Sparkles } from "lucide-react";
 
 function DescriptionField() {

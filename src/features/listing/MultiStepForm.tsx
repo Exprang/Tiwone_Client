@@ -10,12 +10,10 @@ import Media from "./Media";
 import { defaultSpaceFormState, type SpaceFormState } from "./spaceState";
 import { useSpace } from "../../hooks/useSpaceHook";
 import type { PropertyItem } from "../../types/space";
-import {
-  convertFormStateToApiPayload,
-  mapSpaceToFormState,
-} from "./convertToEditFromView";
+import { mapSpaceToFormState } from "./convertToEditFromView";
 import { Loader } from "../../components/Loader";
 import Error from "../../components/Error";
+import { convertToBackendStructure } from "./toBackendStructure";
 
 interface MultiStepFormProps {
   getStep?: (currentStep: number) => void;
@@ -56,7 +54,10 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
     if (!space) {
       createSpace(formData);
     } else {
-      updateSpace(space.id || "", convertFormStateToApiPayload(formData));
+      const { price, ...rest } = formData;
+      const merged = { ...rest, ...price };
+      const readyForBackend = convertToBackendStructure(merged);
+      updateSpace(space.id || "", readyForBackend);
     }
   };
 

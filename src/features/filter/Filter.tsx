@@ -65,7 +65,7 @@ function Filter() {
           <RadioGroup
             name="space_type"
             options={spaceCategoryOptions}
-            value={filterState.space_type}
+            value={filterState.space_type ?? ""}
             direction="horizontal"
             onChange={(val) =>
               setFilterState((prev) => ({
@@ -81,7 +81,7 @@ function Filter() {
           <RadioGroup
             name="deal_type"
             options={dealTypeOptions}
-            value={filterState.deal_type}
+            value={filterState.deal_type ?? ""}
             direction="horizontal"
             onChange={(val) =>
               setFilterState((prev) => ({
@@ -106,12 +106,16 @@ function Filter() {
               type="number"
               placeholder="Min"
               icon={<BanknoteArrowDown />}
-              value={filterState.price_amount.gte ?? ""}
+              value={
+                filterState.price_amount?.gte != null
+                  ? String(filterState.price_amount.gte)
+                  : ""
+              }
               onChange={(e) =>
                 setFilterState((prev) => ({
                   ...prev,
                   price_amount: {
-                    ...prev.price_amount,
+                    ...(prev.price_amount ?? {}),
                     gte: Number(e.target.value),
                   },
                 }))
@@ -122,12 +126,16 @@ function Filter() {
               type="number"
               placeholder="Max"
               icon={<BanknoteArrowUp />}
-              value={filterState.price_amount.lte ?? ""}
+              value={
+                filterState.price_amount?.lte != null
+                  ? String(filterState.price_amount.lte)
+                  : ""
+              }
               onChange={(e) =>
                 setFilterState((prev) => ({
                   ...prev,
                   price_amount: {
-                    ...prev.price_amount,
+                    ...(prev.price_amount ?? {}),
                     lte: Number(e.target.value),
                   },
                 }))
@@ -142,7 +150,7 @@ function Filter() {
           <RadioGroup
             name="price_duration"
             options={priceDurationOptions}
-            value={filterState.price_duration}
+            value={filterState.price_duration ?? ""}
             direction="horizontal"
             onChange={(val) =>
               setFilterState((prev) => ({

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Building,
   DollarSign,
@@ -28,7 +28,7 @@ function CreatePropertyWizard() {
       {/* Progress Indicator */}
       <div className="relative flex justify-between items-center mb-10">
         <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 -z-10" />
-        {steps.map((s, i) => {
+        {steps.map((s) => {
           const Icon = s.icon;
           const isActive = step === s.id;
           const isCompleted = step > s.id;

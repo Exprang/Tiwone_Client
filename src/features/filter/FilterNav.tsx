@@ -17,7 +17,6 @@ interface Suggestion {
 
 function FilterNav() {
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const [setShowPanel] = useState(false);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -216,7 +215,7 @@ function FilterNav() {
 
           {/* Scrollable content */}
           <div className="overflow-y-auto p-4 bg-gray-50">
-            <Filter setShowFilterPanel={setShowPanel} />
+            <Filter />
           </div>
         </div>
       </aside>

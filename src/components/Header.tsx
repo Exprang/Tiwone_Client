@@ -29,16 +29,16 @@ function Header() {
             <div className="flex gap-2">
               <Link
                 to="/signin"
-                className="px-4 py-2 border rounded-sm hover:bg-gray-200 transition-colors"
+                className="px-3 py-2 border rounded-sm hover:bg-gray-200 transition-colors"
               >
                 Sign In
               </Link>
-              <Link
+              {/* <Link
                 to="/signup"
                 className="px-4 py-2 border rounded-sm hover:bg-gray-200 transition-colors"
               >
                 Sign Up
-              </Link>
+              </Link> */}
             </div>
           ))}
       </div>

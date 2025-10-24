@@ -46,7 +46,7 @@ const PricingAndAvailability: React.FC<PricingAndAvailabilityProps> = ({
                 ...prev,
                 price: {
                   ...prev.price,
-                  price_amount: Number(e.target.value) || "",
+                  price_amount: Number(e.target.value) || 0,
                 },
               }))
             }
@@ -63,7 +63,7 @@ const PricingAndAvailability: React.FC<PricingAndAvailabilityProps> = ({
         onChange={(e) =>
           setFormData((prev) => ({
             ...prev,
-            price_duration: { ...prev.price, price_duration: e.target.value },
+            price: { ...prev.price, price_duration: e.target.value as SpaceFormState['price']['price_duration'] },
           }))
         }
         options={priceDurationOptions.slice(1)}

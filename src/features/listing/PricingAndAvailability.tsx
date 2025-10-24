@@ -76,16 +76,17 @@ const PricingAndAvailability: React.FC<PricingAndAvailabilityProps> = ({
         price.price_duration === "YEAR") && (
         <SelectField
           name="durationCount"
-          value={price.price_duration_count?.toString() || ""}
-          onChange={(e) =>
+          value={Number(price.price_duration_count) || 1} // always a number
+          onChange={(e) => {
+            const count = Number(e.target.value) || 1; // ensure a number fallback
             setFormData((prev) => ({
               ...prev,
               price: {
                 ...prev.price,
-                price_duration_count: Number(e.target.value) || "",
+                price_duration_count: count,
               },
-            }))
-          }
+            }));
+          }}
           options={priceDurationCountOptions.slice(1)}
           placeholder="Select multiplier (e.g., 3 months)"
           icon={<Scale className="w-5 h-5 text-gray-500" />}

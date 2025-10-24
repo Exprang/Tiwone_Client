@@ -4,9 +4,9 @@ import { ChevronDown } from "lucide-react";
 interface SelectFieldProps {
   name: string;
   placeholder?: string;
-  value?: string;
+  value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  options: { label: string; value: string }[];
+  options: { label: string | number; value: string | number }[];
   icon?: React.ReactNode;
   error?: string;
   showError?: boolean;

@@ -3,8 +3,8 @@ import React from "react";
 interface SelectorProps {
   label: string;
   options: string[];
-  value: string;
-  onChange: (value: string) => void;
+  value: string | number;
+  onChange: (value: string | number) => void;
 }
 
 const Selector: React.FC<SelectorProps> = ({

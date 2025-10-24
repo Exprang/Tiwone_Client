@@ -6,10 +6,10 @@ import type {
 
 // Price details
 export interface SpacePrice {
-  price_amount: number | string | "";
+  price_amount: number;
   price_currency: string;
   price_duration: PriceDuration | "";
-  price_duration_count?: number | string | "";
+  price_duration_count: number;
 }
 
 // Address details

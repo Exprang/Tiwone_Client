@@ -17,7 +17,6 @@ import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import type { PropertyItem } from "../../types/space";
 import { useSearch } from "../../hooks/useSearchHook";
-import type { NearBy } from "../../types/search";
 
 // Fix default Leaflet marker icon for Vite
 L.Marker.prototype.options.icon = L.icon({ iconUrl, shadowUrl: iconShadow });
@@ -178,7 +177,7 @@ export default function PropertyMap({
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     null
   );
-  const { startSearch, data } = useSearch();
+  const { data } = useSearch();
 
   const prevData = useRef(data);
   const hasRunThis = useRef(false);

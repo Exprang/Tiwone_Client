@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Locate, Search, SlidersHorizontal, TextSearch } from "lucide-react";
 import { getAccurateUserLocationCached } from "../../utils/userLocation";
 import { useSearch } from "../../hooks/useSearchHook";
@@ -19,29 +19,27 @@ function Floater({
 }: // setShowDropdown,
 FloaterProps) {
   const [loading, setLoading] = useState(false);
-  const { setData, startSearch } = useSearch();
+  const { setData, data, startSearch } = useSearch();
 
   const handleLocate = async () => {
     setLoading(true);
-    // console.log(data);
     try {
-      // const location = await getAccurateUserLocation();
       const location = await getAccurateUserLocationCached();
       const point = `${location.coordinates.lat}, ${location.coordinates.lon}`;
       const displayName = location.address.displayName ?? point;
       const { lat, lon } = location.coordinates;
-      // console.log({ lat, lon });
       setQuery(displayName);
-      // setShowDropdown(true);
-      // Optional: trigger map update here
       setData({ lat, lng: lon });
-      // startSearch();
     } catch (err) {
       console.error("Failed to get location:", err);
     } finally {
-      setLoading(false); // stop loading
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    startSearch();
+  }, [data]);
 
   const toggleFilter = () => setShowFilterPanel((prev) => !prev);
 

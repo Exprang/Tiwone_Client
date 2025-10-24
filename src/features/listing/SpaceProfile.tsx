@@ -69,6 +69,7 @@ const SpaceProfile: React.FC<SpaceProfileProps> = ({
                 },
               }))
             }
+            showError={false}
           />
           <button
             type="button"
@@ -136,6 +137,7 @@ const SpaceProfile: React.FC<SpaceProfileProps> = ({
                 },
               }))
             }
+            showError={false}
           />
           <button
             type="button"

@@ -1,35 +1,11 @@
-import {
-  createContext,
-  useReducer,
-  type ReactNode,
-  type Dispatch,
-  useEffect,
-} from "react";
-import {
-  userReducer,
-  type UserAction,
-  type UserState,
-} from "../reducers/useReducer";
+import { useReducer, type ReactNode, useEffect } from "react";
+import { userReducer } from "../reducers/useReducer";
 import { getCurrentUser } from "../api/authAPI";
+import { AuthContext, initialState } from "../hooks/useAuth";
 
 interface UserProviderProps {
   children: ReactNode;
 }
-
-const initialState: UserState = {
-  user: null,
-  isAuthenticated: false,
-  loading: false,
-  error: null,
-};
-
-export const AuthContext = createContext<{
-  state: UserState;
-  dispatch: Dispatch<UserAction>;
-}>({
-  state: initialState,
-  dispatch: () => null,
-});
 
 export const AuthProvider = ({ children }: UserProviderProps) => {
   const [state, dispatch] = useReducer(userReducer, initialState);

@@ -1,7 +1,23 @@
-import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import { createContext, useContext, type Dispatch } from "react";
+// import { AuthContext } from "../contexts/AuthContext";
 import type { LoginRequest, SignupRequest, User } from "../types/auth";
 import { signin, signup as signupUser } from "../api/authAPI";
+import type { UserAction, UserState } from "../reducers/useReducer";
+
+export const initialState: UserState = {
+  user: null,
+  isAuthenticated: false,
+  loading: false,
+  error: null,
+};
+
+export const AuthContext = createContext<{
+  state: UserState;
+  dispatch: Dispatch<UserAction>;
+}>({
+  state: initialState,
+  dispatch: () => null,
+});
 
 export const useUser = () => {
   const { state, dispatch } = useContext(AuthContext);

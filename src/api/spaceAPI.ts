@@ -5,7 +5,7 @@ import api from "./index";
 export const searchSpaces = async (
   searchInput: SearchRequest,
   token?: string
-): Promise<PropertyItem[]> => {
+): Promise<{ success: boolean; message: string; data: PropertyItem[] }> => {
   try {
     const response = await api.post("/api/space/search", searchInput, {
       headers: {

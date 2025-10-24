@@ -45,9 +45,9 @@ function SignupPage() {
       </div>
 
       {/* Right Form Panel */}
-      <div className="flex flex-col justify-center items-center p-8">
+      <div className="flex flex-col justify-center items-center p-4">
         <Form
-          className="w-full max-w-sm p-8 rounded-sm"
+          className="w-full max-w-sm p-4 rounded-sm"
           onSubmit={handleSubmit}
         >
           <fieldset className="mb-6">

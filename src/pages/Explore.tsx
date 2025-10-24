@@ -1,6 +1,5 @@
 import { LayoutList, Map } from "lucide-react";
-import React, { useState, useEffect, useRef } from "react";
-import SearchFilter from "../features/filter/SearchFilter";
+import { useState, useEffect, useRef } from "react";
 import MapView from "../features/MapView/MapView";
 import ListSpace from "../features/space/ListSpace";
 import { getAccurateUserLocationCached } from "../utils/userLocation";
@@ -57,14 +56,10 @@ function Explore() {
 
   return (
     <div className="overflow-hidden">
-      {/* Filter Bar */}
-      {/* <div className="fixed left-0 right-0 h-16 flex items-center ps-3.5">
-      </div> */}
-
       {/* Main Content */}
       <div className="fixed left-0 right-0 bottom-0 top-20">
         {/* Mobile: Toggle List/Map */}
-        <div className="lg:hidden h-full flex flex-col overflow-hidden">
+        <div className="lg:hidden h-full flex flex-col overflow-y-auto">
           {showMap ? (
             <div className="m-4 h-full">
               {center && (

@@ -82,7 +82,7 @@ const InputField: React.FC<InputFieldProps> = ({
       </div>
 
       {/* Error message */}
-      {error && showError && (
+      {showError && (
         <div className="text-red-500 text-sm h-6 rounded-sm">{error}</div>
       )}
     </div>

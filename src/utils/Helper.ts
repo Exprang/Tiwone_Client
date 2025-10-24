@@ -1,4 +1,4 @@
-export const getFieldError = (fieldName: string, errors) => {
+export const getFieldError = (fieldName: string, errors: any[]) => {
   // Check that error exists and is actually an array
   if (!errors || !Array.isArray(errors) || errors.length === 0) return "";
 

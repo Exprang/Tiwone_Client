@@ -20,7 +20,7 @@ import { searchSpaces } from "../api/spaceAPI";
 
 export interface SearchContextProps extends SearchState {
   setSearchType: (type: SearchType) => void;
-  setFilters: (filters: Filters) => void;
+  setFilters: (filters: Filters, searchType?: SearchType) => void;
   setData: (
     data: NearBy | TextSearch | SmartSearch,
     searchType?: SearchType
@@ -32,47 +32,46 @@ export interface SearchContextProps extends SearchState {
 export const SearchProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(searchReducer, initialSearchState);
 
-  // Use ref to always get latest state in async functions
+  // Maintain latest state reference for async operations
   const stateRef = useRef(state);
   stateRef.current = state;
 
   // -----------------------
   // Context Methods
   // -----------------------
+
   const setSearchType = useCallback(
-    (type: SearchType) =>
+    (type: SearchType = "NEARBY") =>
       dispatch({ type: SET_SEARCH_DATA, payload: { searchType: type } }),
     []
   );
 
   const setFilters = useCallback(
-    (filters: Filters) =>
-      dispatch({ type: SET_SEARCH_DATA, payload: { filters } }),
+    (filters: Filters, searchType: SearchType = "NEARBY") =>
+      dispatch({ type: SET_SEARCH_DATA, payload: { searchType, filters } }),
     []
   );
 
   const setData = useCallback(
-    (data: NearBy | TextSearch | SmartSearch, searchType?: SearchType) => {
-      type PayloadData = {
-        nearBy?: NearBy;
-        text?: TextSearch;
-        smart?: SmartSearch;
-      };
-      const payloadData: PayloadData = {};
-
-      // Type guards
-      if ("lat" in data && "lng" in data) {
-        payloadData.nearBy = data as NearBy; // TS knows this is NearBy
-      } else if ("query" in data) {
-        payloadData.text = data as TextSearch;
+    (
+      data: Partial<NearBy> | TextSearch | SmartSearch,
+      searchType: SearchType = "NEARBY"
+    ) => {
+      if ("lat" in data || "lng" in data || "radius" in data) {
+        // Partial NearBy updates supported
+        dispatch({
+          type: SET_SEARCH_DATA,
+          payload: {
+            searchType,
+            nearBy: {
+              ...stateRef.current.searchRequest.nearBy,
+              ...data,
+            } as NearBy,
+          },
+        });
       } else {
-        payloadData.smart = data as SmartSearch;
+        console.warn("Unsupported search type payload. Only NearBy supported.");
       }
-
-      dispatch({
-        type: SET_SEARCH_DATA,
-        payload: { data: payloadData, searchType },
-      });
     },
     []
   );
@@ -81,9 +80,8 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: START_SEARCH });
 
     try {
-      const { searchType, filters, data } = stateRef.current;
-      const searchInput = { searchType, filters, ...data };
-      const response = await searchSpaces(searchInput);
+      const { searchRequest } = stateRef.current;
+      const response = await searchSpaces(searchRequest);
 
       if (response.success) {
         dispatch({ type: "SET_RESULTS", payload: response.data });

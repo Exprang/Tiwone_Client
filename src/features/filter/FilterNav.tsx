@@ -75,16 +75,16 @@ function FilterNav() {
   const searchBar = () => (
     <div className="flex items-center flex-grow border border-gray-200 rounded-lg overflow-hidden">
       <div className="flex items-center px-3 bg-gray-50">
-        <TextSearch className="text-gray-500 w-5 h-5 mr-0" />
+        <TextSearch className="text-gray-500 w-5 h-5" />
       </div>
       <input
         type="text"
-        placeholder="Search: Place, Keywords..."
-        className="flex-grow h-12 px-2 bg-transparent outline-none text-gray-700 placeholder-gray-400"
+        placeholder="Search..."
+        className="flex-grow h-12 px-1 bg-transparent outline-none text-gray-700 placeholder-gray-400"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
-      <button className="bg-blue-600 hover:bg-blue-700 h-12 text-white px-5 flex items-center justify-center transition-colors">
+      <button className="bg-blue-600 hover:bg-blue-700 h-12 text-white px-4 flex items-center justify-center transition-colors">
         <Search className="w-5 h-5" />
       </button>
     </div>
@@ -95,7 +95,7 @@ function FilterNav() {
       {/* Mobile Toggle */}
       <button
         onClick={toggleMenu}
-        className={`border hover:bg-gray-400 p-2 rounded-sm block lg:hidden ${
+        className={`h-12 w-12 flex items-center justify-center hover:bg-gray-100 p-2 rounded-lg lg:hidden ${
           isNavOpen ? "bg-blue-100" : "bg-gray-100 hover:bg-gray-200"
         }`}
       >
@@ -104,6 +104,21 @@ function FilterNav() {
         />
       </button>
 
+      <button
+        onClick={handleLocate}
+        disabled={loading}
+        className={`rounded-lg h-12 w-12 flex items-center justify-center transition-colors lg:hidden ${
+          loading
+            ? "bg-green-600 hover:bg-green-700 cursor-not-allowed"
+            : "bg-gray-100 hover:bg-gray-200"
+        }`}
+      >
+        {loading ? (
+          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+        ) : (
+          <LocateFixed className="text-gray-700 w-5 h-5" />
+        )}
+      </button>
       {/* Desktop */}
       <div className="hidden p-2 rounded-sm lg:flex gap-2">
         <button
@@ -164,11 +179,11 @@ function FilterNav() {
         {/* Main grid: fixed header + scrollable content */}
         <div className="grid grid-rows-[auto_1fr] h-[calc(100vh-64px)]">
           {/* Top section (header/search) */}
-          <div className="p-4 bg-white border-b">
+          <div className="p-2 bg-white">
             <div className="rounded">
               <div className="relative z-20 bg-white rounded-md flex items-center gap-2">
                 <div className="flex w-full">{searchBar()}</div>
-                <button
+                {/* <button
                   onClick={handleLocate}
                   disabled={loading}
                   className={`rounded-lg h-12 w-12 flex items-center justify-center transition-colors ${
@@ -182,7 +197,7 @@ function FilterNav() {
                   ) : (
                     <LocateFixed className="text-gray-700 w-5 h-5" />
                   )}
-                </button>
+                </button> */}
               </div>
 
               {showDropdown && (
@@ -214,7 +229,7 @@ function FilterNav() {
           </div>
 
           {/* Scrollable content */}
-          <div className="overflow-y-auto p-4 bg-gray-50">
+          <div className="mb-20 lg:mb-2 overflow-y-auto bg-gray-50">
             <Filter />
           </div>
         </div>

@@ -11,7 +11,7 @@ function MapView({ searchResults, center, radius }: MapViewInterface) {
     <PropertyMap
       properties={searchResults}
       center={center}
-      radius={radius ?? 1000}
+      radius={radius}
       zoom={14}
     />
   );

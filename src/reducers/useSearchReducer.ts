@@ -1,11 +1,4 @@
-import type {
-  Filters,
-  NearBy,
-  SearchState,
-  SearchType,
-  SmartSearch,
-  TextSearch,
-} from "../types/search";
+import type { Filters, NearBy, SearchState, SearchType } from "../types/search";
 import type { PropertyItem } from "../types/space";
 
 // Search Action Types
@@ -16,13 +9,13 @@ export const SET_SEARCH_DATA = "SET_SEARCH_DATA";
 export const RESET_SEARCH_DATA = "RESET_SEARCH_DATA";
 
 export const initialSearchState: SearchState = {
-  searchType: "NEARBY",
-  filters: {},
-  data: {
+  searchRequest: {
+    searchType: "NEARBY",
+    filters: {},
     nearBy: {
-      lat: -15.4167,
+      lat: -12.4167,
       lng: 28.2833,
-      radius: 8000,
+      radius: 500,
     },
   },
   loading: false,
@@ -36,15 +29,11 @@ type SearchAction =
   | { type: typeof START_SEARCH }
   | {
       type: typeof SET_SEARCH_DATA;
-      payload: {
-        searchType?: SearchType;
-        filters?: Filters;
-        data?: {
-          nearBy?: NearBy;
-          text?: TextSearch;
-          smart?: SmartSearch;
-        };
-      };
+      payload: Partial<{
+        searchType: SearchType;
+        filters: Filters;
+        nearBy: NearBy;
+      }>;
     }
   | { type: typeof RESET_SEARCH_DATA }
   | { type: "SET_RESULTS"; payload: PropertyItem[] };
@@ -64,19 +53,19 @@ export function searchReducer(
       return { ...state, loading: true, error: null, searchResults: [] };
 
     case SET_SEARCH_DATA: {
-      const { searchType, filters, data } = action.payload;
+      const { searchType, filters, nearBy } = action.payload;
 
-      // Determine which keys to update in `state.data`
-      const newData = { ...state.data };
-      if (data?.nearBy) newData.nearBy = { ...newData.nearBy, ...data.nearBy };
-      if (data?.text) newData.text = { ...newData.text, ...data.text };
-      if (data?.smart) newData.smart = { ...newData.smart, ...data.smart };
+      // Only update fields that exist in the payload
+      const updatedRequest = {
+        ...state.searchRequest,
+        ...(searchType !== undefined && { searchType }),
+        ...(filters !== undefined && { filters }),
+        ...(nearBy !== undefined && { nearBy }),
+      };
 
       return {
         ...state,
-        searchType: searchType ?? state.searchType,
-        filters: filters ? { ...state.filters, ...filters } : state.filters,
-        data: newData,
+        searchRequest: updatedRequest,
       };
     }
 

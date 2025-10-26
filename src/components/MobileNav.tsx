@@ -12,7 +12,7 @@ function MobileNav() {
       {/* <Button > */}
       <button
         onClick={toggleMenu}
-        className="border hover:bg-gray-400 p-2 rounded-sm block lg:hidden"
+        className="hover:bg-gray-100 w-12 h-12 flex justify-around items-center rounded-lg lg:hidden"
       >
         <Menu className="w-6 h-6" />
       </button>

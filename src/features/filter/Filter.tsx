@@ -21,8 +21,8 @@ import { useSearch } from "../../hooks/useSearchHook";
 import { useUser } from "../../hooks/useAuth";
 
 function Filter() {
-  const { setFilters, setData } = useSearch();
   const { isAuthenticated, user } = useUser();
+  const { setFilters, setData, loading, error } = useSearch();
   const [userStatus, setUserStatus] = useState<
     "PUBLIC" | "ONBOARD_FREE" | "PAID"
   >("PUBLIC");
@@ -43,20 +43,29 @@ function Filter() {
     space_type: "",
     deal_type: "",
     price_amount: {},
-    price_duration: "",
-    price_duration_count: 0,
+    price_duration: "MONTH",
+    price_duration_count: 1,
   });
 
   const [radius, setRadius] = useState<number>(0.5);
 
   const applyFilters = () => {
-    setFilters(filterState);
-    setData({ radius });
+    setFilters({ ...filterState });
+    setData(
+      {
+        radius: radius * 1000,
+      },
+      "NEARBY"
+    );
   };
+
+  // useEffect(() => {
+  //   console.log("From filter line 63", searchRequest);
+  //   // maybe search
+  // }, [searchRequest]);
 
   return (
     <div className="m-4 grid gap-8 overflow-auto">
-      {/* -------------------- Place & Deal -------------------- */}
       <section className="grid gap-5">
         <h2 className="text-lg font-semibold">Place and Deal</h2>
 
@@ -93,7 +102,6 @@ function Filter() {
         </div>
       </section>
 
-      {/* -------------------- Price & Duration -------------------- */}
       <section className="grid gap-5">
         <h2 className="text-lg font-semibold">Price and Duration</h2>
 
@@ -107,26 +115,6 @@ function Filter() {
               placeholder="Min"
               icon={<BanknoteArrowDown />}
               value={
-                filterState.price_amount?.gte != null
-                  ? String(filterState.price_amount.gte)
-                  : ""
-              }
-              onChange={(e) =>
-                setFilterState((prev) => ({
-                  ...prev,
-                  price_amount: {
-                    ...(prev.price_amount ?? {}),
-                    gte: Number(e.target.value),
-                  },
-                }))
-              }
-            />
-            <InputField
-              name="price_max"
-              type="number"
-              placeholder="Max"
-              icon={<BanknoteArrowUp />}
-              value={
                 filterState.price_amount?.lte != null
                   ? String(filterState.price_amount.lte)
                   : ""
@@ -137,6 +125,26 @@ function Filter() {
                   price_amount: {
                     ...(prev.price_amount ?? {}),
                     lte: Number(e.target.value),
+                  },
+                }))
+              }
+            />
+            <InputField
+              name="price_max"
+              type="number"
+              placeholder="Max"
+              icon={<BanknoteArrowUp />}
+              value={
+                filterState.price_amount?.gte != null
+                  ? String(filterState.price_amount.gte)
+                  : ""
+              }
+              onChange={(e) =>
+                setFilterState((prev) => ({
+                  ...prev,
+                  price_amount: {
+                    ...(prev.price_amount ?? {}),
+                    gte: Number(e.target.value),
                   },
                 }))
               }
@@ -198,9 +206,10 @@ function Filter() {
       <div className="flex justify-end">
         <button
           onClick={applyFilters}
+          disabled={loading}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
         >
-          Apply Filters
+          {loading ? "Loading..." : error ? "Error" : "Apply Filters"}
         </button>
       </div>
     </div>

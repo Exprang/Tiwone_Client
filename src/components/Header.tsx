@@ -33,12 +33,6 @@ function Header() {
               >
                 Sign In
               </Link>
-              {/* <Link
-                to="/signup"
-                className="px-4 py-2 border rounded-sm hover:bg-gray-200 transition-colors"
-              >
-                Sign Up
-              </Link> */}
             </div>
           ))}
       </div>

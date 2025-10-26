@@ -4,10 +4,12 @@ import MapView from "../features/MapView/MapView";
 import ListSpace from "../features/space/ListSpace";
 import { getAccurateUserLocationCached } from "../utils/userLocation";
 import { useSearch } from "../hooks/useSearchHook";
+import type { PropertyItem } from "../types/space";
 
 function Explore() {
-  const { data, setData, searchResults, startSearch } = useSearch();
+  const { setData, searchResults, startSearch, searchRequest } = useSearch();
   const [center, setCenter] = useState<[number, number]>();
+  const [spaces, setSpaces] = useState<PropertyItem[]>([]);
 
   const hasRun = useRef(false);
 
@@ -27,20 +29,13 @@ function Explore() {
     })();
   }, []);
 
-  const prevData = useRef(data); // store initial value
-  const hasRunThis = useRef(false);
+  useEffect(() => {
+    startSearch();
+  }, [searchRequest, startSearch]);
 
   useEffect(() => {
-    if (hasRunThis.current) return; // already ran
-
-    // Only run if data exists AND has changed from initial
-    if (data && data !== prevData.current) {
-      hasRunThis.current = true;
-      startSearch();
-      // console.log(data);
-    }
-    prevData.current = data; // update for next comparison
-  }, [data]);
+    setSpaces(searchResults);
+  }, [searchResults]);
 
   const [showMap, setShowMap] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
@@ -61,11 +56,11 @@ function Explore() {
         {/* Mobile: Toggle List/Map */}
         <div className="lg:hidden h-full flex flex-col overflow-y-auto">
           {showMap ? (
-            <div className="m-4 h-full">
-              {center && (
+            <div className="m-2 h-full">
+              {center && searchRequest.nearBy?.radius && (
                 <MapView
-                  searchResults={searchResults}
-                  radius={data.nearBy?.radius || 1000}
+                  searchResults={spaces}
+                  radius={searchRequest?.nearBy?.radius}
                   center={center}
                 />
               )}
@@ -93,10 +88,10 @@ function Explore() {
             <ListSpace />
           </div>
           <div className="m-4">
-            {center && (
+            {center && searchRequest.nearBy?.radius && (
               <MapView
-                searchResults={searchResults}
-                radius={data.nearBy?.radius || 1000}
+                searchResults={spaces}
+                radius={searchRequest?.nearBy?.radius}
                 center={center}
               />
             )}

@@ -135,7 +135,11 @@ function LocationMarker({
 
     const newLocation = { lat: newPos.lat, lng: newPos.lng };
     // console.log(newLocation);
-    setData(newLocation);
+    // here trying to set data so it updates the state which then
+    setData({ ...newLocation });
+    // when the state changes it gets/fetch latest data based on the coord.
+    // so down here or in filter it calles the fetch data.
+
     // startSearch();
   };
 
@@ -177,19 +181,18 @@ export default function PropertyMap({
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     null
   );
-  const { data } = useSearch();
+  const { searchRequest } = useSearch();
 
-  const prevData = useRef(data);
+  const prevData = useRef(searchRequest);
   const hasRunThis = useRef(false);
 
   useEffect(() => {
     if (hasRunThis.current) return;
-    if (data && data !== prevData.current) {
+    if (searchRequest && searchRequest !== prevData.current) {
       hasRunThis.current = true;
-      // startSearch();
     }
-    prevData.current = data;
-  }, [data]);
+    prevData.current = searchRequest;
+  }, [searchRequest]);
 
   return (
     <div className="h-full w-full overflow-hidden relative rounded-lg">
